@@ -50,7 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const { type } = event;
-    console.log("🚀 ~ file: webhooks.ts ~ line 53 ~ type", type);
+
     if (relevantEvents.has(type)) {
       try {
         switch (type) {
@@ -68,7 +68,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           case "checkout.session.completed":
             const checkoutSession = event.data
               .object as Stripe.Checkout.Session;
-            console.log("🚀 ~ file: webhooks.ts ~ line 71 ~ SESSION cOMPLETED");
+
             await saveSubscription(
               checkoutSession.subscription.toString(),
               checkoutSession.customer.toString(),

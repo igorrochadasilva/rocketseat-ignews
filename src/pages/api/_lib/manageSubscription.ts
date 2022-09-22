@@ -8,7 +8,6 @@ export async function saveSubscription(
   customerId: string,
   createAction = false
 ) {
-  console.log("🚀 ~ file: manageSubscription.ts ~ 11 ~ INICIANDO");
   //Buscar o usuário no banco do FaunaDB com o ID {customerID}
   //salvar os dados da subscription no FaunaDB
   const userRef = await fauna.query(
@@ -26,15 +25,8 @@ export async function saveSubscription(
     status: subscription.status,
     price_id: subscription.items.data[0].price.id,
   };
-  console.log(
-    "🚀 ~ file: manageSubscription.ts ~ line 28 ~ VENDO VALOR",
-    createAction
-  );
+
   if (createAction) {
-    console.log(
-      "🚀 ~ file: manageSubscription.ts ~ line 30 ~ createAction",
-      createAction
-    );
     await fauna.query(
       q.Create(q.Collection("subscriptions"), { data: subscriptionData })
     );
