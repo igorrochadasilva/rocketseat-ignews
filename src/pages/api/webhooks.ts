@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { stripe } from "../../services/stripe";
 import { saveSubscription } from "./_lib/manageSubscription";
 
+// add new webhooks to update and delete subscription informations
 // Cód pronto já
 async function buffer(readable: Readable) {
   const chunks = [];
@@ -23,10 +24,10 @@ export const config = {
 };
 
 const relevantEvents = new Set([
-  'checkout.session.completed',
-  'customer.subscription.updated',
-  'customer.subscription.deleted',
-])
+  "checkout.session.completed",
+  "customer.subscription.updated",
+  "customer.subscription.deleted",
+]);
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -49,10 +50,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const { type } = event;
-
+    console.log("🚀 ~ file: webhooks.ts ~ line 53 ~ type", type);
     if (relevantEvents.has(type)) {
       try {
-        switch (type) {          
+        switch (type) {
           case "customer.subscription.updated":
           case "customer.subscription.deleted":
             const subscription = event.data.object as Stripe.Subscription;
@@ -67,7 +68,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           case "checkout.session.completed":
             const checkoutSession = event.data
               .object as Stripe.Checkout.Session;
-
+            console.log("🚀 ~ file: webhooks.ts ~ line 71 ~ SESSION cOMPLETED");
             await saveSubscription(
               checkoutSession.subscription.toString(),
               checkoutSession.customer.toString(),
